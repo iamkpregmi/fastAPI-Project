@@ -19,11 +19,17 @@ def get_db():
         db.close()
 
 
-@router.post('/create-blog')
+@router.post('/create-blog', status_code = status.HTTP_201_CREATED)
 def get_create_blog(request: schema.Blog, db : Session = Depends(get_db)):
-    create_blog(request, db)
+    return create_blog(request, db)
 
 
-@router.get('/blogs')
+@router.get('/blogs', status_code=status.HTTP_202_ACCEPTED)
 def get_all_blogs(db : Session = Depends(get_db)):
-    all_blogs(db)
+    return all_blogs(db)
+
+
+@router.get('/blog/{id}', status_code=status.HTTP_202_ACCEPTED)
+def get_blog(id:int, db : Session = Depends(get_db)):
+    return blog(id, db)
+

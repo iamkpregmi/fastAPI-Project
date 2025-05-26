@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 import models
+from fastapi import HTTPException, status
 
 
 
@@ -15,6 +16,14 @@ def create_blog(request: any, db: any):
 
 # Get all data using query paramerers
 def all_blogs(db):
-    print('hello sir',)
     blogs = db.query(models.Blog).all()
     return blogs
+
+
+#get single blog
+def blog(id,db):
+    blog = db.query(models.Blog).filter(models.Blog.id==id).first()
+    if not blog:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Blog with the id {id} is not available.')
+    return blog
+
