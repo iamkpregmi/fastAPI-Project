@@ -23,7 +23,31 @@ def all_blogs(db):
 #get single blog
 def blog(id,db):
     blog = db.query(models.Blog).filter(models.Blog.id==id).first()
+    
     if not blog:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Blog with the id {id} is not available.')
     return blog
+
+
+# Update blog
+def updateBlog(id, request, db):
+    blog = db.query(models.Blog).filter(models.Blog.id == id)
+
+    if not blog.first():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Blog id {id} not found.')
+    
+    blog.update(request.model_dump())
+    db.commit()
+    return {'data': f'{id} Blog updated successfully.'}
+
+
+def deleteBlog(id, db):
+    blog = db.query(models.Blog).filter(models.Blog.id == id).first()
+
+    if not blog:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Blog id {id} not found.')
+    
+    db.delete(blog)
+    db.commit()
+    return {'data': f'Blog id {id} deleted successfully.'}
 

@@ -33,3 +33,12 @@ def get_all_blogs(db : Session = Depends(get_db)):
 def get_blog(id:int, db : Session = Depends(get_db)):
     return blog(id, db)
 
+
+@router.put('/update/{id}', status_code=status.HTTP_202_ACCEPTED)
+def get_update(id:int,request: schema.Blog, db : Session = Depends(get_db)):
+    return updateBlog(id, request, db)
+
+
+@router.delete('/delete/{id}', status_code=status.HTTP_200_OK)
+def get_deleteBlog(id:int, db : Session = Depends(get_db)):
+    return deleteBlog(id, db)
