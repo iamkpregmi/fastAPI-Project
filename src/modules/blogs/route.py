@@ -25,9 +25,9 @@ def create_blog(request: schema.Blog, db : Session = Depends(get_db)):
 
 
 # Get all blogs data
-@router.get('/blogs', status_code=status.HTTP_202_ACCEPTED)
-def all_blogs(db : Session = Depends(get_db)):
-    return allBlogs(db)
+@router.post('/blogs', status_code=status.HTTP_202_ACCEPTED)
+def all_blogs(request: schema.SearchBlog, db : Session = Depends(get_db)):
+    return allBlogs(request, db)
 
 
 # Get single blog data

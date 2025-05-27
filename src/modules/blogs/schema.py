@@ -1,7 +1,13 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class Blog(BaseModel):
     title: str
     body: str
     
+
+
+class SearchBlog(BaseModel):
+    search_text: str 
+    page: int = Field(gt=0, default=1)
+    limit: int = Field(gt=0, default=10)
 

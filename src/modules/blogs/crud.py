@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 import models
 from fastapi import HTTPException, status
+from sqlalchemy import desc, or_
 
 
 
@@ -15,9 +16,24 @@ def createBlog(request: any, db: any):
 
 
 # Get all data using query paramerers
-def allBlogs(db):
-    blogs = db.query(models.Blog).all()
-    return blogs
+def allBlogs(request, db):
+    search_text = request.search_text
+    page = request.page
+    limit = request.limit
+    skip = (page - 1) * limit
+    if search_text == 'string' or search_text == '':
+        blogs = db.query(models.Blog).order_by(models.Blog.id).offset(skip).limit(limit).all()
+    else:
+        blogs = db.query(models.Blog).filter(or_(models.Blog.title.ilike(f"%{search_text}%"), models.Blog.body.ilike(f"%{search_text}%"))).order_by(models.Blog.id).offset(skip).limit(limit).all()
+    total_blogs = db.query(models.Blog).count()
+    context = {
+        "total_blogs": total_blogs,
+        "page": page,
+        "limit": limit,
+        "data": blogs
+    }
+
+    return context
 
 
 #get single blog
