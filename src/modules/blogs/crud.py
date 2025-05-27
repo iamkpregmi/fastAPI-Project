@@ -5,7 +5,7 @@ from fastapi import HTTPException, status
 
 
 # Create new blog send data via request body
-def create_blog(request: any, db: any):
+def createBlog(request: any, db: any):
     new_blog = models.Blog(title=request.title, body=request.body)
     db.add(new_blog)
     db.commit()
@@ -15,7 +15,7 @@ def create_blog(request: any, db: any):
 
 
 # Get all data using query paramerers
-def all_blogs(db):
+def allBlogs(db):
     blogs = db.query(models.Blog).all()
     return blogs
 

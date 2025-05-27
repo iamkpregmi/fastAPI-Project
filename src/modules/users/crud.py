@@ -1,2 +1,2 @@
-def profile():
-    return {"data": "this is the user profile"}
+def registerUser(request):
+    return {"data": request}

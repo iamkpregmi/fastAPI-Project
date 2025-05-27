@@ -1,8 +1,9 @@
 from fastapi import APIRouter
-from .crud import profile
+from .crud import *
+from . import schema
 
 router = APIRouter()
 
-@router.get("/profile")
-def get_profile():
-    return profile()
+@router.post("/register")
+def register_User(request: schema.User):
+    return registerUser(request)

@@ -18,27 +18,32 @@ def get_db():
     finally:
         db.close()
 
-
+# Create single blog data
 @router.post('/create-blog', status_code = status.HTTP_201_CREATED)
-def get_create_blog(request: schema.Blog, db : Session = Depends(get_db)):
-    return create_blog(request, db)
+def create_blog(request: schema.Blog, db : Session = Depends(get_db)):
+    return createBlog(request, db)
 
 
+# Get all blogs data
 @router.get('/blogs', status_code=status.HTTP_202_ACCEPTED)
-def get_all_blogs(db : Session = Depends(get_db)):
-    return all_blogs(db)
+def all_blogs(db : Session = Depends(get_db)):
+    return allBlogs(db)
 
 
+# Get single blog data
 @router.get('/blog/{id}', status_code=status.HTTP_202_ACCEPTED)
-def get_blog(id:int, db : Session = Depends(get_db)):
+def blog(id:int, db : Session = Depends(get_db)):
     return blog(id, db)
 
 
+# Update blog data
 @router.put('/update/{id}', status_code=status.HTTP_202_ACCEPTED)
-def get_update(id:int,request: schema.Blog, db : Session = Depends(get_db)):
+def update_Blog(id:int,request: schema.Blog, db : Session = Depends(get_db)):
     return updateBlog(id, request, db)
 
 
+# Delete single blog data
 @router.delete('/delete/{id}', status_code=status.HTTP_200_OK)
-def get_deleteBlog(id:int, db : Session = Depends(get_db)):
+def delete_Blog(id:int, db : Session = Depends(get_db)):
     return deleteBlog(id, db)
+
