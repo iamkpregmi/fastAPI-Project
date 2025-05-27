@@ -37,7 +37,7 @@ def allBlogs(request, db):
 
 
 #get single blog
-def blog(id,db):
+def singleBlog(id,db):
     blog = db.query(models.Blog).filter(models.Blog.id==id).first()
     
     if not blog:

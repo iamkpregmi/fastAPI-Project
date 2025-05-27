@@ -33,7 +33,7 @@ def all_blogs(request: schema.SearchBlog, db : Session = Depends(get_db)):
 # Get single blog data
 @router.get('/blog/{id}', status_code=status.HTTP_202_ACCEPTED)
 def blog(id:int, db : Session = Depends(get_db)):
-    return blog(id, db)
+    return singleBlog(id, db)
 
 
 # Update blog data
