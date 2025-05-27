@@ -7,7 +7,7 @@ class Blog(BaseModel):
 
 
 class SearchBlog(BaseModel):
-    search_text: str 
+    search_text: str = Field(default="")
     page: int = Field(gt=0, default=1)
     limit: int = Field(gt=0, default=10)
 
