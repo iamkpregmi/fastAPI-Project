@@ -3,10 +3,9 @@ from typing import Optional
 import re
 
 class User(BaseModel):
-    name: str = Field(default="default value",max_length=50)
-    age: int = Field(gt=0)
-    email: str
-    password: str
+    name: str = Field(default="test",max_length=50)
+    email: str = Field(default="test@test.com")
+    password: str = Field(default="")
     is_admin: Optional[bool] = False
 
     #this code responsible for the email validation
@@ -15,4 +14,10 @@ class User(BaseModel):
         if not re.match(r"[^@]+@[^@]+\.[^@]+", value):
             raise ValueError('Invalid email format')
         return value
+
+
+class ShowUser(BaseModel):
+    name: str
+    email: str
+    is_admin: bool
 
