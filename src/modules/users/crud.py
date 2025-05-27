@@ -9,7 +9,8 @@ def registerUser(request, db):
     new_user = models.User(
         name = request.name,
         email = request.email,
-        password = encrypted_password
+        password = encrypted_password,
+        is_admin = request.is_admin
     )
     db.add(new_user)
     db.commit()
