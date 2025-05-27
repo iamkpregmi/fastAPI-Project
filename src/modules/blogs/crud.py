@@ -21,10 +21,11 @@ def allBlogs(request, db):
     page = request.page
     limit = request.limit
     skip = (page - 1) * limit
-    total_blogs = db.query(models.Blog).count()
+    total_blogs = db.query(models.Blog).filter(models.Blog.is_deleted == False).count()
     if search_text == '':
         blogs = (
             db.query(models.Blog)
+            .filter(models.Blog.is_deleted == False)
             .order_by(models.Blog.id)
             .offset(skip)
             .limit(limit)
@@ -34,6 +35,7 @@ def allBlogs(request, db):
         blogs = (
             db.query(models.Blog)
             .filter(
+                models.Blog.is_deleted == False,
                 or_(
                     models.Blog.title.ilike(f"%{search_text}%"),
                     models.Blog.body.ilike(f"%{search_text}%")
@@ -58,7 +60,7 @@ def allBlogs(request, db):
 
 #get single blog
 def singleBlog(id,db):
-    blog = db.query(models.Blog).filter(models.Blog.id==id).first()
+    blog = db.query(models.Blog).filter((models.Blog.id == id) & (models.Blog.is_deleted == False)).first()
     
     if not blog:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Blog with the id {id} is not available.')
@@ -67,7 +69,7 @@ def singleBlog(id,db):
 
 # Update blog
 def updateBlog(id, request, db):
-    blog = db.query(models.Blog).filter(models.Blog.id == id)
+    blog = db.query(models.Blog).filter((models.Blog.id == id) & (models.Blog.is_deleted == False))
 
     if not blog.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Blog id {id} not found.')
@@ -83,7 +85,10 @@ def deleteBlog(id, db):
     if not blog:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Blog id {id} not found.')
     
-    db.delete(blog)
+    # db.delete(blog) #hard delete data
+    # db.commit()
+    blog.is_deleted = True #soft delete data
     db.commit()
+    db.refresh(blog)  # Optional: Refresh the object with latest DB state
     return {'data': f'Blog id {id} deleted successfully.'}
 

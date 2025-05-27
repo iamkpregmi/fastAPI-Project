@@ -4,7 +4,7 @@ from .crud import *
 from . import schema
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine
-from typing import List
+from typing import List, Dict
 
 router = APIRouter()
 
@@ -31,7 +31,7 @@ def all_blogs(request: schema.SearchBlog, db : Session = Depends(get_db)):
 
 
 # Get single blog data
-@router.get('/blog/{id}', status_code=status.HTTP_202_ACCEPTED)
+@router.get('/blog/{id}', status_code=status.HTTP_202_ACCEPTED, response_model= schema.ShowBlogs)
 def blog(id:int, db : Session = Depends(get_db)):
     return singleBlog(id, db)
 

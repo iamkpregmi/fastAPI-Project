@@ -11,3 +11,7 @@ class SearchBlog(BaseModel):
     page: int = Field(gt=0, default=1)
     limit: int = Field(gt=0, default=10)
 
+
+class ShowBlogs(Blog):
+    id: int
+

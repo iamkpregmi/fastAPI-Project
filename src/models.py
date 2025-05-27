@@ -8,6 +8,7 @@ class Blog(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     title = Column(String)
     body = Column(String)
+    is_deleted = Column(Boolean, default=False)
 
 
 class User(Base):
