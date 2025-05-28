@@ -42,10 +42,19 @@ def allBlogs(request, db):
         )
     search_result = len(blogs)
     #cor the get specific data
-    data=[{"id":item.id,
-           "title":item.title,
-           "body": item.body
-    } for item in blogs]
+    # data=[{"id":item.id,
+    #        "title":item.title,
+    #        "body": item.body,
+    # } for item in blogs]
+    data = [
+        {
+            "s_no": index + 1,  # Serial number based on page & limit
+            "id": item.id,
+            "title": item.title,
+            "body": item.body
+        }
+        for index, item in enumerate(blogs)
+    ]
 
     context = {
         "total_blogs": total_blogs,

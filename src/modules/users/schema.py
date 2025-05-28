@@ -13,6 +13,11 @@ class User(BaseModel):
     @field_validator('email')
     def validate_email(cls, value):
         return commonFunction.validate_email(value)
+    
+    #this code responsible for the password validation
+    @field_validator('password')
+    def validate_password(cls, value):
+        return commonFunction.validate_password(value)
 
 
 class ShowUser(BaseModel):
