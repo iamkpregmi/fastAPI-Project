@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional
+from helper.common_function import commonFunction
 import re
 
 class User(BaseModel):
@@ -11,9 +12,7 @@ class User(BaseModel):
     #this code responsible for the email validation
     @field_validator('email')
     def validate_email(cls, value):
-        if not re.match(r"[^@]+@[^@]+\.[^@]+", value):
-            raise ValueError('Invalid email format')
-        return value
+        return commonFunction.validate_email(value)
 
 
 class ShowUser(BaseModel):
