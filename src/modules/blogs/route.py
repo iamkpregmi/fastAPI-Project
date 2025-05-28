@@ -5,11 +5,12 @@ from . import schema
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine
 from typing import List, Dict
+from models import Base
 
 router = APIRouter()
 
 #Create Table into Database
-models.Base.metadata.create_all(engine)
+Base.metadata.create_all(engine)
 
 def get_db():
     db = SessionLocal()
@@ -19,7 +20,7 @@ def get_db():
         db.close()
 
 # Create single blog data
-@router.post('/create-blog', status_code = status.HTTP_201_CREATED)
+@router.post('/create-blog', status_code = status.HTTP_201_CREATED, response_model= schema.ShowBlogs)
 def create_blog(request: schema.Blog, db : Session = Depends(get_db)):
     return createBlog(request, db)
 

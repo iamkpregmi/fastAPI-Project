@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-import models
+from models import Blog
 from fastapi import HTTPException, status
 from sqlalchemy import desc, or_
 
@@ -7,7 +7,7 @@ from sqlalchemy import desc, or_
 
 # Create new blog send data via request body
 def createBlog(request: any, db: any):
-    new_blog = models.Blog(title=request.title, body=request.body)
+    new_blog = Blog(title=request.title, body=request.body)
     db.add(new_blog)
     db.commit()
     db.refresh(new_blog)
@@ -21,38 +21,38 @@ def allBlogs(request, db):
     page = request.page
     limit = request.limit
     skip = (page - 1) * limit
-    total_blogs = db.query(models.Blog).filter(models.Blog.is_deleted == False).count()
+    total_blogs = db.query(Blog).filter(Blog.is_deleted == False).count()
     if search_text == '':
-        blogs = (
-            db.query(models.Blog)
-            .filter(models.Blog.is_deleted == False)
-            .order_by(models.Blog.id)
-            .offset(skip)
-            .limit(limit)
-            .all()
-        )
+        blogs = db.query(Blog).filter(Blog.is_deleted == False).order_by(Blog.id).offset(skip).limit(limit).all()
+        
     else:
         blogs = (
-            db.query(models.Blog)
+            db.query(Blog)
             .filter(
-                models.Blog.is_deleted == False,
+                Blog.is_deleted == False,
                 or_(
-                    models.Blog.title.ilike(f"%{search_text}%"),
-                    models.Blog.body.ilike(f"%{search_text}%")
+                    Blog.title.ilike(f"%{search_text}%"),
+                    Blog.body.ilike(f"%{search_text}%")
                 )
             )
-            .order_by(models.Blog.id)
+            .order_by(Blog.id)
             .offset(skip)
             .limit(limit)
             .all()
         )
-    search_count = len(blogs)
+    search_result = len(blogs)
+    #cor the get specific data
+    data=[{"id":item.id,
+           "title":item.title,
+           "body": item.body
+    } for item in blogs]
+
     context = {
         "total_blogs": total_blogs,
-        "search_count": search_count,
+        "search_result": search_result,
         "page": page,
         "limit": limit,
-        "data": blogs
+        "data": data
     }
 
     return context
@@ -60,7 +60,7 @@ def allBlogs(request, db):
 
 #get single blog
 def singleBlog(id,db):
-    blog = db.query(models.Blog).filter((models.Blog.id == id) & (models.Blog.is_deleted == False)).first()
+    blog = db.query(Blog).filter((Blog.id == id) & (Blog.is_deleted == False)).first()
     
     if not blog:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Blog with the id {id} is not available.')
@@ -69,7 +69,7 @@ def singleBlog(id,db):
 
 # Update blog
 def updateBlog(id, request, db):
-    blog = db.query(models.Blog).filter((models.Blog.id == id) & (models.Blog.is_deleted == False))
+    blog = db.query(Blog).filter((Blog.id == id) & (Blog.is_deleted == False))
 
     if not blog.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Blog id {id} not found.')
@@ -79,8 +79,8 @@ def updateBlog(id, request, db):
     return {'data': f'{id} Blog updated successfully.'}
 
 
-def deleteBlog(id, db):
-    blog = db.query(models.Blog).filter(models.Blog.id == id).first()
+def deleteBlog(id, db): 
+    blog = db.query(Blog).filter(Blog.id == id).first()
 
     if not blog:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Blog id {id} not found.')
