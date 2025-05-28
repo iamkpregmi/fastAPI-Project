@@ -15,3 +15,8 @@ class SearchBlog(BaseModel):
 class ShowBlogs(Blog):
     id: int
 
+
+class User(BaseModel):
+    name: str
+    email: str
+    password: str
