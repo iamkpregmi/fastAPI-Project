@@ -2,6 +2,10 @@ from sqlalchemy.orm import Session
 from models import Blog
 from fastapi import HTTPException, status
 from sqlalchemy import desc, or_
+from fastapi import UploadFile
+from fastapi.responses import JSONResponse
+import shutil
+import os
 
 
 
@@ -101,3 +105,16 @@ def deleteBlog(id, db):
     db.refresh(blog)  # Optional: Refresh the object with latest DB state
     return {'data': f'Blog id {id} deleted successfully.'}
 
+
+
+def upload_file(file: UploadFile):
+    os.makedirs("assets", exist_ok=True)  # create directory if not exist
+    file_location = f"assets/{file.filename}"
+    with open(file_location, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    return JSONResponse(content={
+        "filename": file.filename,
+        "content_type": file.content_type,
+        "message": "File uploaded successfully!"
+    })

@@ -6,6 +6,8 @@ from sqlalchemy.orm import Session
 from database import SessionLocal, engine
 from typing import List, Dict
 from models import Base
+from fastapi import APIRouter, UploadFile, File
+from .crud import upload_file
 
 router = APIRouter()
 
@@ -47,4 +49,9 @@ def update_Blog(id:int,request: schema.Blog, db : Session = Depends(get_db)):
 @router.delete('/delete/{id}', status_code=status.HTTP_200_OK)
 def delete_Blog(id:int, db : Session = Depends(get_db)):
     return deleteBlog(id, db)
+
+
+@router.post("/upload-file")
+def simple_upload_file(file: UploadFile = File(...)):
+    return upload_file(file)  # Don't use await here
 
