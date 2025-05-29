@@ -1,13 +1,13 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from modules.blogs.route import router as blog_router
 from modules.users.route import router as user_router
+from modules.testing.route import router as testing_router
 from modules.authentication.route import router as user_authentication
 import config
-from fastapi.templating import Jinja2Templates
 
 app = FastAPI(docs_url="/docs")
 
-templates = Jinja2Templates(directory="templates")
+
 
 # CSRF ALLOW 
 config.CSRF_ALLOW(app)
@@ -16,8 +16,5 @@ config.CSRF_ALLOW(app)
 app.include_router(blog_router, prefix="/blog", tags=["Blog"])
 app.include_router(user_router, prefix="/user", tags=["User"])
 app.include_router(user_authentication, tags=["Authentication"])
+app.include_router(testing_router, prefix="/testing", tags=["Testing"])
 
-
-@app.get('/')
-def home_page(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "name": "Krishna"})
