@@ -6,6 +6,7 @@ from fastapi import UploadFile
 from fastapi.responses import JSONResponse
 import shutil
 import os
+import re
 
 
 
@@ -110,6 +111,20 @@ def deleteBlog(id, db):
 def upload_file(file: UploadFile):
     os.makedirs("assets", exist_ok=True)  # create directory if not exist
     file_location = f"assets/{file.filename}"
+    allowed_types = ["image/png", "image/jpeg", "image/jpg"]
+    filename = file.filename
+    # for the check file type
+    if file.content_type not in allowed_types:
+        raise HTTPException(
+            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            detail="Invalid file type. Allowed types are: png, jpeg, jpg",
+        )
+    # for the check file name
+    if not re.match(r"^[a-zA-Z0-9_\-.]+$", filename):
+        raise HTTPException(
+            status_code=400, detail="Invalid filename: only alphanumeric, underscores, hyphens, and dots are allowed."
+        )
+
     with open(file_location, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 

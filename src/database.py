@@ -6,13 +6,17 @@ from config import setting
 # PostgreSQL connection URL format:
 # postgresql+psycopg2://<username>:<password>@<host>:<port>/<database>
 
-SQLALCHEMY_DATABASE_URL = f"postgresql+psycopg2://{setting.DATABASE_USER_NAME}:{setting.DATABASE_PASSWORD}@{setting.DATABASE_HOST}:{setting.DATABASE_PORT}/{setting.DATABASE_NAME}"
+try:
+    SQLALCHEMY_DATABASE_URL = f"postgresql+psycopg2://{setting.DATABASE_USER_NAME}:{setting.DATABASE_PASSWORD}@{setting.DATABASE_HOST}:{setting.DATABASE_PORT}/{setting.DATABASE_NAME}"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
-SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+    engine = create_engine(SQLALCHEMY_DATABASE_URL)
+    SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
-Base = declarative_base()
-
+    Base = declarative_base()
+except:
+    print("---------------------------------------------------------")
+    print("Something went wrong with database check your credentials")
+    print("---------------------------------------------------------")
 
 
 #--------------------------------------------------------------------------------------------
