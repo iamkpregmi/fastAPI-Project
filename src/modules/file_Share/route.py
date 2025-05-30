@@ -36,5 +36,5 @@ def receive_file(id, db : Session = Depends(get_db)):
 
 
 @router.post('/download-file/{id}')
-def receive_file(id, db : Session = Depends(get_db)):
+def download_file(id, db : Session = Depends(get_db)):
     return download_file_data(id, db)
