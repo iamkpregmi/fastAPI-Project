@@ -36,5 +36,6 @@ class MasterDocuments(Base):
     doc_name = Column(String, nullable=False)
     doc_details = Column(Text)
     doc_path = Column(String)
+    share_path = Column(String)
     doc_created_by = Column(String)
     doc_created_at = Column(DateTime, default=datetime.datetime.utcnow())
