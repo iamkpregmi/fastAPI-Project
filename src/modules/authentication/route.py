@@ -19,7 +19,7 @@ def get_db():
 
 
 @router.post('/login')
-def user_login(request: schema.Login, db: Session = Depends(get_db)):
-# def user_login(request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+# def user_login(request: schema.Login, db: Session = Depends(get_db)):
+def user_login(request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     return login(request, db)
 

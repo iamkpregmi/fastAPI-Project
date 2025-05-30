@@ -1,7 +1,8 @@
 from pydantic import BaseModel, Field, field_validator
-from typing import Optional
+from typing import Optional, List
 from helper.common_function import commonFunction
 import re
+
 
 class User(BaseModel):
     name: str = Field(default="test",max_length=50)
@@ -25,3 +26,14 @@ class ShowUser(BaseModel):
     email: str
     is_admin: bool
 
+
+class Blog(BaseModel):
+    title: str
+    body: str
+
+
+class ShowUserBlog(BaseModel):
+    name: str
+    email: str
+
+    blogs: List['Blog'] = []

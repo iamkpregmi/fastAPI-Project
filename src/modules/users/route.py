@@ -23,11 +23,11 @@ def get_db():
         db.close()
 
 @router.post("/register", status_code = status.HTTP_201_CREATED)
-def register_User(request: schema.User, db : Session = Depends(get_db), current_user: schema.User = Depends(oauth2.get_current_user)):
+def register_User(request: schema.User, db : Session = Depends(get_db)):
     return registerUser(request, db)
 
 
-@router.get('/get-user/{id}', response_model=schema.ShowUser)
+@router.get('/get-user/{id}', response_model=schema.ShowUserBlog)
 def get_user(id:int, db : Session = Depends(get_db), current_user: schema.User = Depends(oauth2.get_current_user)):
     return getUser(id, db)
 

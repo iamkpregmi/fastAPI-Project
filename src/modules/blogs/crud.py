@@ -7,12 +7,13 @@ from fastapi.responses import JSONResponse
 import shutil
 import os
 import re
+from sqlalchemy.orm import joinedload
 
 
 
 # Create new blog send data via request body
 def createBlog(request: any, db: any):
-    new_blog = Blog(title=request.title, body=request.body)
+    new_blog = Blog(title=request.title, body=request.body, user_id='1')
     db.add(new_blog)
     db.commit()
     db.refresh(new_blog)
@@ -27,12 +28,14 @@ def allBlogs(request, db):
     limit = request.limit
     skip = (page - 1) * limit
     total_blogs = db.query(Blog).filter(Blog.is_deleted == False).count()
+
     if search_text == '':
-        blogs = db.query(Blog).filter(Blog.is_deleted == False).order_by(Blog.id).offset(skip).limit(limit).all()
+        blogs = db.query(Blog).options(joinedload(Blog.creator)).filter(Blog.is_deleted == False).order_by(Blog.id).offset(skip).limit(limit).all()
         
     else:
         blogs = (
             db.query(Blog)
+            .options(joinedload(Blog.creator))
             .filter(
                 Blog.is_deleted == False,
                 or_(
@@ -51,12 +54,20 @@ def allBlogs(request, db):
     #        "title":item.title,
     #        "body": item.body,
     # } for item in blogs]
+
+    for i in blogs:
+        print(i.__dict__)
+
     data = [
         {
             "s_no": index + 1,  # Serial number based on page & limit
             "id": item.id,
             "title": item.title,
-            "body": item.body
+            "body": item.body,
+            "creator": {
+                "name": item.creator.name,
+                "email": item.creator.email
+            }
         }
         for index, item in enumerate(blogs)
     ]

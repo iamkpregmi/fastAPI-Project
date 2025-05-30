@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import List
 
 class Blog(BaseModel):
     title: str
@@ -12,8 +13,16 @@ class SearchBlog(BaseModel):
     limit: int = Field(gt=0, default=10)
 
 
-class ShowBlogs(Blog):
+class ShowUser(BaseModel):
+    name: str
+    email: str
+    
+
+class ShowBlogs(BaseModel): # this is for the get specific field
     id: int
+    title: str
+    body: str
+    creator: ShowUser # Show user info
 
 
 class User(BaseModel):
