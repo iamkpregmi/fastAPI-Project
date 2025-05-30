@@ -1,6 +1,7 @@
 from database import Base
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, Text
 from sqlalchemy.orm import relationship
+import datetime
 
 
 class Blog(Base):
@@ -25,3 +26,15 @@ class User(Base):
     is_admin = Column(Boolean)
 
     blogs = relationship('Blog', back_populates='creator')
+
+
+
+class MasterDocuments(Base):
+    __tablename__ = 'documents'
+
+    doc_id = Column(Integer, primary_key=True, autoincrement=True)
+    doc_name = Column(String, nullable=False)
+    doc_details = Column(Text)
+    doc_path = Column(String)
+    doc_created_by = Column(String)
+    doc_created_at = Column(DateTime, default=datetime.datetime.utcnow())
