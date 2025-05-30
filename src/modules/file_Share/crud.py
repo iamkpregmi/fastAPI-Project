@@ -21,6 +21,7 @@ def share(doc_name, doc_details, doc_created_by, file, db):
     db.refresh(new_data)
 
     return JSONResponse(content={
+        'shareable_id': new_data.doc_id,
         "filename": file.filename,
         "content_type": file.content_type,
         "message": "File uploaded successfully!"
@@ -28,7 +29,6 @@ def share(doc_name, doc_details, doc_created_by, file, db):
 
 
 def receive_file_data(id, db):
-
     file_data = db.query(MasterDocuments).filter(MasterDocuments.doc_id == id).first()
 
     if not file_data:
@@ -69,3 +69,4 @@ def download_file_data(id, db):
         media_type="application/octet-stream",
         filename=file_data.doc_path,
     )
+

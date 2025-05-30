@@ -19,7 +19,7 @@ def get_db():
         db.close()
 
 
-@router.post('/file-share')
+@router.post('/file-share', summary="Upload file & Share to anyone", description="Upload a file and save metadata to the database.")
 def online_file_share(
     doc_name: str = Form(),
     doc_details: str = Form(),
