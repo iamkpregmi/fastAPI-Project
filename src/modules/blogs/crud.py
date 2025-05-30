@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models import Blog
+from models import Blog,User
 from fastapi import HTTPException, status
 from sqlalchemy import desc, or_
 from fastapi import UploadFile
@@ -30,8 +30,9 @@ def allBlogs(request, db):
     total_blogs = db.query(Blog).filter(Blog.is_deleted == False).count()
 
     if search_text == '':
-        blogs = db.query(Blog).options(joinedload(Blog.creator)).filter(Blog.is_deleted == False).order_by(Blog.id).offset(skip).limit(limit).all()
-        
+        # blogs = db.query(Blog).options(joinedload(Blog.creator)).filter(Blog.is_deleted == False).order_by(Blog.id).offset(skip).limit(limit).all()
+        blogs = db.query(Blog).join(User, User.id == Blog.user_id).filter(Blog.is_deleted == False).order_by(Blog.id).offset(skip).limit(limit).all()
+
     else:
         blogs = (
             db.query(Blog)
