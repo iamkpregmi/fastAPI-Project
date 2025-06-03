@@ -5,6 +5,7 @@ from database import SessionLocal, engine
 from sqlalchemy.orm import Session
 import models
 from helper import oauth2
+from auth import jwt_bearer
 
 
 
@@ -28,6 +29,6 @@ def register_User(request: schema.User, db : Session = Depends(get_db)):
 
 
 @router.get('/get-user/{id}', response_model=schema.ShowUserBlog)
-def get_user(id:int, db : Session = Depends(get_db), current_user: schema.User = Depends(oauth2.get_current_user)):
+def get_user(id:int, db : Session = Depends(get_db), current_user: schema.User = Depends(jwt_bearer)):
     return getUser(id, db)
 
