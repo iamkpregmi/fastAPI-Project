@@ -18,5 +18,5 @@ app.include_router(file_share_router, prefix="/file-share", tags=["File Share"])
 app.include_router(blog_router, prefix="/blog", tags=["Blog"])
 app.include_router(user_router, prefix="/user", tags=["User"])
 app.include_router(user_authentication, tags=["Authentication"])
-app.include_router(testing_router, prefix="/testing", tags=["Testing"])
+app.include_router(testing_router, tags=["Testing"])
 
